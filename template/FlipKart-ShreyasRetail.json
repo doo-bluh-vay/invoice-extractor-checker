@@ -1,0 +1,76 @@
+{
+    "name":"Flipkart",
+    "keywords":[
+        "Shreyash Retail Private Limited"
+    ],
+    "fields":[
+        {
+            "name":"Invoice Number",
+	    "location":"right",
+            "identifier":"Invoice Number"
+        },
+        {
+            "name":"Invoice Date",
+            "location":"right",
+            "identifier":"Invoice Date"
+        },
+        {
+            "name":"Total",
+            "location":"second-right",
+            "identifier":"Summary"
+        }
+    ],
+    "table_lineitems":{
+        "horizontal_lines" : false,
+        "vertical_lines" : false,
+        "columns":[
+        {
+            "name":"S.\nNo",
+            "row_start":true,
+            "alignment":"left"
+        },
+        {
+            "name":"Item",
+            "row_start":true,
+            "alignment":"left"
+        },
+        {
+            "name":"HSN\n(Tax%)",
+            "row_start":true,
+            "alignment":"left"
+        },
+        {
+            "name":"Qty",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"MRP\n(Rs)",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Savings\n(Rs)",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Total\nAmt(Rs)",
+            "row_start":true,
+            "alignment":"center"
+        }       
+        ],
+        "line_end":"Summary"    
+    },
+    "check":{
+        "field":
+        {
+            "name":"Total"
+        },
+        "lineitem":
+        {
+            "name":"Total\nAmt(Rs)"
+        }
+    }
+
+}

@@ -1,0 +1,152 @@
+{
+    "fields": {
+        "Invoice Number": ": FABO5L2000005510", 
+        "Invoice Date": ": 02-04-2019", 
+        "Total": "2309.99"
+    }, 
+    "lineitems": [
+        {
+            "S.\nNo": "FOOD ITEMS"
+        }, 
+        {
+            "S.\nNo": "1", 
+            "Savings\n(Rs)": "101.00", 
+            "Total\nAmt(Rs)": "349.00", 
+            "HSN\n(Tax%)": "04059020 \n(12.0)", 
+            "Qty": "1", 
+            "Item": "Nandini Pure Cow Ghee 1 L Pouch", 
+            "MRP\n(Rs)": "450.00"
+        }, 
+        {
+            "S.\nNo": "2", 
+            "Savings\n(Rs)": "102.00", 
+            "Total\nAmt(Rs)": "193.00", 
+            "HSN\n(Tax%)": "17011190 \n(5.0)", 
+            "Qty": "1", 
+            "Item": "Madhur Sugar, 5 kg", 
+            "MRP\n(Rs)": "295.00"
+        }, 
+        {
+            "S.\nNo": "3", 
+            "Savings\n(Rs)": "92.01", 
+            "Total\nAmt(Rs)": "282.99", 
+            "HSN\n(Tax%)": "07133100 \n(5.0)", 
+            "Qty": "3", 
+            "Item": "Tata Sampann Unpolished Toor Dal, 1 kg", 
+            "MRP\n(Rs)": "125.00"
+        }, 
+        {
+            "S.\nNo": "4", 
+            "Savings\n(Rs)": "33.00", 
+            "Total\nAmt(Rs)": "189.00", 
+            "HSN\n(Tax%)": "19019090 \n(18.0)", 
+            "Qty": "1", 
+            "Item": "Horlicks Classic Malt 500 g", 
+            "MRP\n(Rs)": "222.00"
+        }, 
+        {
+            "S.\nNo": "5", 
+            "Savings\n(Rs)": "38.01", 
+            "Total\nAmt(Rs)": "231.99", 
+            "HSN\n(Tax%)": "09012110 \n(5.0)", 
+            "Qty": "3", 
+            "Item": "Cothas Coffee Speciality Blend Roast & Ground Coffee 200 \ng", 
+            "MRP\n(Rs)": "90.00"
+        }, 
+        {
+            "S.\nNo": "6", 
+            "Savings\n(Rs)": "61.00", 
+            "Total\nAmt(Rs)": "159.00", 
+            "HSN\n(Tax%)": "15119010 \n(5.0)", 
+            "Qty": "2", 
+            "Item": "Sunpure Sunflower Oil Pouch, 1 L", 
+            "MRP\n(Rs)": "110.00"
+        }, 
+        {
+            "S.\nNo": "7", 
+            "Savings\n(Rs)": "45.00", 
+            "Total\nAmt(Rs)": "335.00", 
+            "HSN\n(Tax%)": "15155091 \n(5.0)", 
+            "Qty": "1", 
+            "Item": "Idhayam Sesame Oil Pouch, 1 L", 
+            "MRP\n(Rs)": "380.00"
+        }, 
+        {
+            "S.\nNo": "8", 
+            "Savings\n(Rs)": "81.00", 
+            "Total\nAmt(Rs)": "139.00", 
+            "HSN\n(Tax%)": "21069099 \n(18.0)", 
+            "Qty": "1", 
+            "Item": "MTR Badam Drink Mix 500 g", 
+            "MRP\n(Rs)": "220.00"
+        }, 
+        {
+            "S.\nNo": "9", 
+            "Savings\n(Rs)": "19.00", 
+            "Total\nAmt(Rs)": "166.00", 
+            "HSN\n(Tax%)": "11010000 \n(5.0)", 
+            "Qty": "1", 
+            "Item": "Patanjali Whole Wheat Atta, 5 kg", 
+            "MRP\n(Rs)": "185.00"
+        }, 
+        {
+            "S.\nNo": "10", 
+            "Savings\n(Rs)": "59.00", 
+            "Total\nAmt(Rs)": "1.00", 
+            "HSN\n(Tax%)": "17011190 \n(5.0)", 
+            "Qty": "1", 
+            "Item": "Madhur Sugar, 1 kg", 
+            "MRP\n(Rs)": "60.00"
+        }, 
+        {
+            "S.\nNo": "11", 
+            "Savings\n(Rs)": "49.00", 
+            "Total\nAmt(Rs)": "111.00", 
+            "HSN\n(Tax%)": "07132000 \n(5.0)", 
+            "Qty": "1", 
+            "Item": "Flipkart Supermart Select Fried Gram Split, 1 kg", 
+            "MRP\n(Rs)": "160.00"
+        }, 
+        {
+            "S.\nNo": "12", 
+            "Savings\n(Rs)": "45.00", 
+            "Total\nAmt(Rs)": "80.00", 
+            "HSN\n(Tax%)": "07133100aa \n(0.0)", 
+            "Qty": "1", 
+            "Item": "Urad Dal White Whole, 1 kg", 
+            "MRP\n(Rs)": "125.00"
+        }, 
+        {
+            "S.\nNo": "13\nNON FOOD ITEMS", 
+            "Savings\n(Rs)": "66.00", 
+            "Total\nAmt(Rs)": "1.00", 
+            "HSN\n(Tax%)": "04059020 \n(12.0)", 
+            "Qty": "1", 
+            "Item": "Aashirvaad Svasti Pure Cow Ghee 100 ml Pouch", 
+            "MRP\n(Rs)": "67.00"
+        }, 
+        {
+            "S.\nNo": "14", 
+            "Savings\n(Rs)": "6.99", 
+            "Total\nAmt(Rs)": "71.01", 
+            "HSN\n(Tax%)": "34011110 \n(18.0)", 
+            "Qty": "3", 
+            "Item": "Medimix Ayurvedic Soap, 75 g", 
+            "MRP\n(Rs)": "26.00"
+        }, 
+        {
+            "S.\nNo": "15", 
+            "Savings\n(Rs)": "69.00", 
+            "Total\nAmt(Rs)": "1.00", 
+            "HSN\n(Tax%)": "33061020 \n(18.0)", 
+            "Qty": "1", 
+            "Item": "Himalaya Stain Removal Toothpaste, 80 g", 
+            "MRP\n(Rs)": "70.00"
+        }
+    ], 
+    "checkstatus": {
+        "match_status": {
+            "status": true
+        }
+    }
+}

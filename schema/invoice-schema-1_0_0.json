@@ -1,0 +1,222 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$ref": "#/definitions/invoice",
+  "definitions": {
+    "invoice": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Template name. Must be unique across all templates part of the system.",
+          "type": "string"
+        },
+        "keywords": {
+          "description": "A list of all the text that would exist in the pdf. If matches, apply this template.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "description": "List of fields to pick and information about where and how to pick a field's content.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/field"
+          }
+        }, 
+        "table_lineitems": {
+          "description": "Information about where and how to pick table line items.",
+          "$ref": "#/definitions/table_lineitem"
+        }, 
+        "regex_lineitems": {
+          "description": "Information about where and how to pick regex based line items.",
+          "$ref": "#/definitions/regex_lineitem"
+        }, 
+        "check": {
+          "description": "Checker to check if totals match.",
+          "$ref": "#/definitions/check"
+        }
+     },
+      "required": [
+        "name",
+        "keywords"
+      ],
+      "additionalProperties": false
+    },
+    "field": {
+      "description": "Definition on from where and how to pick a field's content",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the field.",
+          "type": "string"
+        },
+        "location": {
+          "description": "Identify the location of the field.",
+          "type": "string",
+          "enum": [
+            "right",
+            "second-right",
+            "bottom",
+            "regex"            
+          ]
+        },        
+        "identifier": {
+          "description": "Identifying the field. Can use regex.",
+          "type": "string"
+        },        
+        "ordinal": {
+          "description": "Ordinal (first, second ...).",
+          "type": "number",
+          "minimum":1,
+          "maximum":5
+        }
+      },
+      "required": [
+        "name",
+        "location",
+        "identifier"
+      ],
+      "additionalProperties": false
+    },
+    "table_lineitem": {
+      "description": "Definition on from where and how to pick a table line item's content",
+      "type": "object",
+      "properties": {
+        "horizontal_lines": {
+          "description": "Does this have horizontal lines in between rows?",
+          "type": "boolean"
+        },
+        "vertical_lines": {
+          "description": "Does this have vertical lines in between columns?",
+          "type": "boolean"
+        },
+        "columns": {
+          "description": "Information about the columns.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/table_lineitem_column"
+          }          
+        },        
+        "line_end": {
+          "description": "Identifying the end of table line items. Can use regex.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "horizontal_lines",
+        "vertical_lines",
+        "columns",
+        "line_end"
+      ],
+      "additionalProperties": false
+    },
+    "table_lineitem_column": {
+      "description": "Table Line item column information.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the column",
+          "type": "string"
+        },
+        "row_start": {
+          "description": "Will this column have information to identify that its the start of a row?",
+          "type": "boolean"
+        },
+        "alignment": {
+          "description": "Column alignment.",
+          "type": "string",
+          "enum": [
+            "left",
+            "right",
+            "center"            
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "row_start",
+        "alignment"
+      ],
+      "additionalProperties": false
+    },    
+    "regex_lineitem": {
+      "description": "Definition on from where and how to pick a regex line item's content",
+      "type": "object",
+      "properties": {
+        "line_start": {
+          "description": "regex used to identify the start of line item. Basically the line item header.",
+          "type": "string"
+        },
+        "line_end": {
+          "description": "regex used to identify the end of line items.",
+          "type": "string"
+        },        
+        "lines": {
+          "description": "regex used to identify a line item.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }, 
+        "columns": {
+          "description": "The list of columns identified in a line item.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "line_start",
+        "line_end",
+        "lines",
+        "columns"
+      ],
+      "additionalProperties": false
+    }, 
+    "check": {
+      "description": "Definition on from where and how to pick a regex line item's content",
+      "type": "object",
+      "properties": {
+        "field": {
+          "description": "Field whose value needs to be used for checking.",
+          "$ref": "#/definitions/check_detail"
+        },
+        "lineitem": {
+          "description": "Line Item column whose value needs to be used for checking.",
+          "$ref": "#/definitions/check_detail"
+        }        
+      },
+      "required": [
+        "field",
+        "lineitem"
+      ],
+      "additionalProperties": false
+    },
+    "check_detail": {
+      "description": "Checker details",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Column name",
+          "type": "string"
+        },
+        "regex": {
+          "description": "regex to be used to extract the number",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }    
+   }
+}

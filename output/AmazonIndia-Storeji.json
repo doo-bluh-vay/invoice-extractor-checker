@@ -1,0 +1,26 @@
+{
+    "fields": {
+        "AmountInWords": "Three Hundred And Nine only", 
+        "Invoice Number": " IN-11338", 
+        "Invoice Date": " 14.10.2017", 
+        "Total": "₹309.00"
+    }, 
+    "lineitems": [
+        {
+            "Description": "Speedwav Car OEM FM/AM Roof Antenna-Hyundai Santro |\nB0156RPQEG ( 96490 ) ", 
+            "Sl.\nNo": "1", 
+            "Net\nAmount": "₹241.41", 
+            "Total\nAmount": "₹309.00", 
+            "Tax\nType": "IGST", 
+            "Tax\nRate": "28%", 
+            "Tax\nAmount": "₹67.59", 
+            "Unit\nPrice": "₹241.41", 
+            "Quantity": "1"
+        }
+    ], 
+    "checkstatus": {
+        "match_status": {
+            "status": true
+        }
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "name":"Amazon-Storeji",
+    "keywords":[
+        "Storeji Pvt Ltd"
+    ],
+    "fields":[
+        {
+            "name":"Invoice Number",
+	    "location":"right",
+            "identifier":"Invoice Number:"
+        },
+        {
+            "name":"Invoice Date",
+            "location":"right",
+            "identifier":"Invoice Date:"
+        },
+        {
+            "name":"Total",
+            "location":"second-right",
+            "identifier":"TOTAL:"
+        },
+        {
+            "name":"AmountInWords",
+            "location":"bottom",
+            "identifier":"Amount in Words:"
+        }
+    ],
+    "table_lineitems":{
+        "horizontal_lines" : true,
+        "vertical_lines" : true,
+        "columns":[
+        {
+            "name":"Sl.\nNo",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Description",
+            "row_start":true,
+            "alignment":"left"
+        },
+        {
+            "name":"Unit\nPrice",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Quantity",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Net\nAmount",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Tax\nRate",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Tax\nType",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Tax\nAmount",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Total\nAmount",
+            "row_start":true,
+            "alignment":"center"
+        }        
+        ],
+        "line_end":"TOTAL:"    
+    },
+    "check":{
+        "field":
+        {
+            "name":"Total",
+            "regex":"(?P<Total>\\d+(,\\d+)*(\\.\\d+)?)"
+        },
+        "lineitem":
+        {
+            "name":"Total\nAmount",
+            "regex":"(?P<Total>\\d+(,\\d+)*(\\.\\d+)?)"
+        }
+    }
+
+}

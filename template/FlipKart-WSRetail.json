@@ -1,0 +1,77 @@
+{
+    "name":"Flipkart",
+    "keywords":[
+        "WS Retail Services Pvt. Ltd"
+    ],
+    "fields":[
+        {
+            "name":"Invoice Number",
+	    "location":"regex",
+            "identifier":"Invoice No :\\s+(.*)"
+        },
+        {
+            "name":"Invoice Date",
+            "location":"right",
+            "identifier":"Invoice Date:"
+        },
+        {
+            "name":"Total",
+            "location":"right",
+            "identifier":"Grand Total"
+        }
+    ],
+    "table_lineitems":{
+        "horizontal_lines" : false,
+        "vertical_lines" : false,
+        "columns":[
+        {
+            "name":"Product",
+            "row_start":false,
+            "alignment":"left"
+        },
+        {
+            "name":"Title",
+            "row_start":false,
+            "alignment":"center"
+        },
+        {
+            "name":"Qty",
+            "row_start":true,
+            "alignment":"right"
+        },
+        {
+            "name":"Price ",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Tax(%)",
+            "row_start":false,
+            "alignment":"center"
+        },
+        {
+            "name":"Tax ",
+            "row_start":true,
+            "alignment":"center"
+        },
+        {
+            "name":"Total ",
+            "row_start":true,
+            "alignment":"center"
+        }       
+        ],
+        "line_end":"Total"    
+    },
+    "check":{
+        "field":
+        {
+            "name":"Total"
+        },
+        "lineitem":
+        {
+            "name":"Total ",
+            "regex":"(?P<Total>(-)?\\d+(,\\d+)*(\\.\\d+)?)"
+        }
+    }
+
+}
