@@ -14,6 +14,7 @@ from ObjectLayoutContainer import ObjectLayoutContainer
 from copy import deepcopy
 from sortedcontainers import SortedDict, SortedList
 from sets import Set
+import collections
 
 from ConfigManager import ConfigManager
 
@@ -26,10 +27,11 @@ class TextBoxLocation:
     self.y1 = y1
 
 class ColumnInformation:
-  def __init__(self, name, alignment, row_start):
+  def __init__(self, name, alignment, row_start, can_extend_text_to_neighbour):
     self.name = name
     self.alignment = alignment
     self.row_start = row_start
+    self.can_extend_text_to_neighbour = can_extend_text_to_neighbour
 
 class ColumnTextWidth:
   def __init__(self, text, x0, x1, alignment):
@@ -295,12 +297,12 @@ class ObjectLayoutAlgorithms:
             logger = Logger.getLogger()
             if logger.isEnabledFor(logging.DEBUG):
                logger.debug('OVERLAP INDEX:  ' + str(max_overlap_index))
-               logger.debug('OVERLAP TEXT :  ' + list_of_possible_textboxes[max_overlap_index].text)
+               logger.debug('OVERLAP TEXT :  ' + list_of_possible_textboxes[max_overlap_index].text.encode('utf-8'))
                logger.debug('OVERLAP VALUE :  ' + str(list_overlap[max_overlap_index]))
                logger.debug('OVERLAP CLOSENESS :  ' + str(list_closeness[max_overlap_index]))
 
                logger.debug('CLOSENESS INDEX:  ' + str(min_closeness_index))
-               logger.debug('CLOSENESS TEXT :  ' + list_of_possible_textboxes[min_closeness_index].text)
+               logger.debug('CLOSENESS TEXT :  ' + list_of_possible_textboxes[min_closeness_index].text.encode('utf-8'))
                logger.debug('CLOSENESS VALUE :  ' + str(list_closeness[min_closeness_index]))
                logger.debug('CLOSENESS OVERLAP VALUE :  ' + str(list_overlap[min_closeness_index]))   
 
@@ -308,10 +310,10 @@ class ObjectLayoutAlgorithms:
                logger.debug("CLOSENESS RATIO " + str(closeness_ratio))
 
             if overlap_ratio < closeness_ratio:
-               logger.debug("PICKED OVERLAP " + list_of_possible_textboxes[max_overlap_index].text )
+               logger.debug("PICKED OVERLAP " + list_of_possible_textboxes[max_overlap_index].text.encode('utf-8') )
                return list_of_possible_textboxes[max_overlap_index].text                  
             else:
-               logger.debug("OVERLAP CLOSENESS " + list_of_possible_textboxes[min_closeness_index].text )
+               logger.debug("OVERLAP CLOSENESS " + list_of_possible_textboxes[min_closeness_index].text.encode('utf-8'))
                return list_of_possible_textboxes[min_closeness_index].text                  
 
    def _copy_textbox (self, list_of_possible_textboxes, textbox):
@@ -505,7 +507,7 @@ class ObjectLayoutAlgorithms:
             if page_number == lineitems_end_page_location and ( key_y1 >= (lineitems_end_location-lineitem_end_location_margin) \
                and key_y1 <= (lineitems_end_location+lineitem_end_location_margin) ):
                if len(line_item_collector) > 0 :
-                  list_of_line_items.append(line_item_collector)
+                  self._append_table_lineitem(list_of_column_information, list_of_line_items,line_item_collector)
                   line_item_collector = {}   
 
                # Flush the contents of list_of_mapdata
@@ -520,15 +522,15 @@ class ObjectLayoutAlgorithms:
                         text = text + "\n" + one_mapdata[column_name]
                      one_line_item_collector[column_name] = text 
                if len(one_line_item_collector) > 0 :
-                  list_of_line_items.append(one_line_item_collector)
-               del list_of_mapdata[:]                                 
+                  self._append_table_lineitem(list_of_column_information, list_of_line_items,one_line_item_collector)
+               del list_of_mapdata[:]   
                break
-
-            textboxes_at_y1 = rows_of_y1_textboxes[key_y1]
 
             one_row_of_line_item = {} 
             current_column_index = 0
 
+            textboxes_at_y1 = rows_of_y1_textboxes[key_y1]
+            
             for key_x1 in list(textboxes_at_y1):
 
                textbox_at_y1_x1 = textboxes_at_y1[key_x1]    
@@ -566,7 +568,7 @@ class ObjectLayoutAlgorithms:
 
                   column_name_to_add = ""
                   text_to_add_to_column = ""
-                  logger.debug('NEAREST ' + textbox_at_y1_x1.text + ' x0=' + str(nearest_x0) + ' x1=' + str(nearest_x1))
+                  logger.debug('NEAREST ' + textbox_at_y1_x1.text.encode('utf-8') + ' x0=' + str(nearest_x0) + ' x1=' + str(nearest_x1))
                   if nearest_x0 != -1 and nearest_x1 != -1 :
                      for column_name, textbox in dict_column_text_widths.items():
                         if textbox.x0 >= nearest_x0 and textbox.x1 <= nearest_x1:
@@ -620,34 +622,89 @@ class ObjectLayoutAlgorithms:
                         return {}
 
                      if found_column == True:
-                        text = one_row_of_line_item.get(column.name)
-                        if text == None:
-                           text = textbox_at_y1_x1.text
-                        else:
-                           text = text + "\n" + textbox_at_y1_x1.text
-                        one_row_of_line_item[column.name] = text   
+                        found_multi_column_text = False                        
+                        # Check if the text extends to the next column
+                        if (counter+1) < len(list_of_column_information) and column.can_extend_text_to_neighbour == True:
+                           next_column = list_of_column_information[counter+1]
+                           next_column_textbox = dict_column_text_widths[next_column.name]
+                           if column.alignment == next_column.alignment:
+                              if next_column_textbox.x0 > textbox_at_y1_x1.x0 and next_column_textbox.x1 <= textbox_at_y1_x1.x1:
+                                 logger.info("Text |" +textbox_at_y1_x1.text.encode('utf-8') + "| extends to column " + next_column.name)
+                                 if column.alignment == "center":
+                                    text_to_process = textbox_at_y1_x1.text
+                                    mid_point = column_textbox.x1 + (next_column_textbox.x0 - column_textbox.x1)/2
+                                    len_text = len(text_to_process)
+                                    char_width = (textbox_at_y1_x1.x1 - textbox_at_y1_x1.x0)/len_text
+                                    start_index = int((mid_point - textbox_at_y1_x1.x0)/char_width)
+                                    text_traversal_index = 0
+                                    while found_multi_column_text == False:
+                                       before_index = start_index - text_traversal_index
+                                       after_index = start_index + text_traversal_index
+                                       reference_index = -1
+                                       if before_index > 0 and text_to_process[before_index] == ' ':
+                                          reference_index = before_index
+                                          found_multi_column_text = True
+                                       elif after_index < len_text and text_to_process[after_index] == ' ':
+                                          reference_index = after_index
+                                          found_multi_column_text = True
+                                       if found_multi_column_text == True:
+                                          column_text = text_to_process[0:reference_index]
+                                          text = one_row_of_line_item.get(column.name)
+                                          if text == None:
+                                             text = column_text
+                                          else:
+                                             text = text + "\n" + column_text
+                                          one_row_of_line_item[column.name] = text                                           
+                                          next_column_text = text_to_process[reference_index+1:]
+                                          text = one_row_of_line_item.get(next_column.name)
+                                          if text == None:
+                                             text = next_column_text
+                                          else:
+                                             text = text + "\n" + next_column_text
+                                          one_row_of_line_item[next_column.name] = text                                            
+
+                                       text_traversal_index += 1
+
+                        if found_multi_column_text == False:
+                           text = one_row_of_line_item.get(column.name)
+                           if text == None:
+                              text = textbox_at_y1_x1.text
+                           else:
+                              text = text + "\n" + textbox_at_y1_x1.text
+                           one_row_of_line_item[column.name] = text  
+
                         current_column_index = counter + 1
                         break                       
 
                      counter +=1 
 
                if found_column == False:
-                  logger.warn("WARNING! Trying to fit since could not find column for text |" + textbox_at_y1_x1.text + "|")
-                  counter = 0
-                  while counter < len(list_of_column_information):
-                     column = list_of_column_information[counter]
-                     column_textbox = dict_column_text_widths[column.name]
-                     if (textbox_at_y1_x1.x0 >= column_textbox.x0 and textbox_at_y1_x1.x0 <= column_textbox.x1) or \
-                        (textbox_at_y1_x1.x0 <= column_textbox.x0):
-                        logger.debug("Found column |" + column.name + "| for text |" + textbox_at_y1_x1.text + "|")
-                        text = one_row_of_line_item.get(column.name)
-                        if text == None:
-                           text = textbox_at_y1_x1.text
-                        else:
-                           text = text + "\n" + textbox_at_y1_x1.text
-                        one_row_of_line_item[column.name] = text                         
-                        break
-                     counter += 1
+                  ignore_textbox = False
+                  # First check if this column falls extreme left before even the first column starts, so that we can ignore it
+                  first_column = list_of_column_information[0]
+                  if first_column.alignment == 'left':
+                     column_textbox = dict_column_text_widths[first_column.name]
+                     if (textbox_at_y1_x1.x0 < column_textbox.x0 and textbox_at_y1_x1.x1 < column_textbox.x0):
+                        logger.info("Ignoring |" +textbox_at_y1_x1.text.encode('utf-8') + "| since its doesn't belong to a line item")
+                        ignore_textbox = True
+
+                  if ignore_textbox == False:
+                     logger.warn("WARNING! Trying to fit since could not find column for text |" + textbox_at_y1_x1.text.encode('utf-8') + "|")                     
+                     counter = 0
+                     while counter < len(list_of_column_information):
+                        column = list_of_column_information[counter]
+                        column_textbox = dict_column_text_widths[column.name]
+                        if (textbox_at_y1_x1.x0 >= column_textbox.x0 and textbox_at_y1_x1.x0 <= column_textbox.x1) or \
+                           (textbox_at_y1_x1.x0 <= column_textbox.x0):
+                           logger.debug("Found column |" + column.name + "| for text |" + textbox_at_y1_x1.text.encode('utf-8') + "|")
+                           text = one_row_of_line_item.get(column.name)
+                           if text == None:
+                              text = textbox_at_y1_x1.text
+                           else:
+                              text = text + "\n" + textbox_at_y1_x1.text
+                           one_row_of_line_item[column.name] = text                         
+                           break
+                        counter += 1
 
             if has_horizontal_lines == False:
 
@@ -673,7 +730,7 @@ class ObjectLayoutAlgorithms:
                               text = text + "\n" + one_mapdata[column_name]
                            one_line_item_collector[column_name] = text 
                   if len(one_line_item_collector) > 0 :
-                     list_of_line_items.append(one_line_item_collector)
+                     self._append_table_lineitem(list_of_column_information, list_of_line_items,one_line_item_collector)
                   del list_of_mapdata[0:line_start_index+1]
 
                   # Add the new row to list_of_mapdata
@@ -721,7 +778,7 @@ class ObjectLayoutAlgorithms:
                                     text = text + "\n" + one_mapdata[column_name]
                                  one_line_item_collector[column_name] = text 
                         if len(one_line_item_collector) > 0 :
-                           list_of_line_items.append(one_line_item_collector)
+                           self._append_table_lineitem(list_of_column_information, list_of_line_items,one_line_item_collector)
                         del list_of_mapdata[0:line_start_index]
 
                         # Remember till where the list has to be flushed
@@ -765,13 +822,20 @@ class ObjectLayoutAlgorithms:
                   for horizontal_line in horizontal_lines:
                      if horizontal_line >= next_key_y1 and horizontal_line <= key_y1 and abs(next_key_y1-key_y1) >= horizontal_line_margin:
                         if len(line_item_collector) > 0 :
-                           list_of_line_items.append(line_item_collector)
+                           self._append_table_lineitem(list_of_column_information, list_of_line_items,line_item_collector)
                            line_item_collector = {}    
                         break 
 
             previous_key_y1 = key_y1                                   
 
       return list_of_line_items
+
+   def _append_table_lineitem(self, list_of_column_information, list_of_line_items, collected_line_item):
+      modified_collected_line_item = collections.OrderedDict()
+      for column in list_of_column_information:
+         if collected_line_item.get(column.name) != None:
+            modified_collected_line_item[column.name] = collected_line_item[column.name]
+      list_of_line_items.append(modified_collected_line_item)
 
    def get_regex_lineitem_header_location (self, lineitem_header_regex):
 
@@ -807,7 +871,7 @@ class ObjectLayoutAlgorithms:
 
       list_of_line_items = []
         
-      prev_one_row_data = {}
+      prev_one_row_data = collections.OrderedDict()
       last_index = 1
       
       # Traverse all the pages
@@ -839,7 +903,7 @@ class ObjectLayoutAlgorithms:
                   last_index = 1
                   if len(prev_one_row_data) > 0 :
                      list_of_line_items.append(prev_one_row_data)
-                     prev_one_row_data = {} 
+                     prev_one_row_data = collections.OrderedDict()
                   for column_name in list_of_columns:
                      try:
                         column_value = regex_search.group(column_name)
@@ -865,7 +929,7 @@ class ObjectLayoutAlgorithms:
                
       if len(prev_one_row_data) > 0 :
          list_of_line_items.append(prev_one_row_data)
-         prev_one_row_data = {}             
+         prev_one_row_data = collections.OrderedDict()             
       
       return list_of_line_items
 

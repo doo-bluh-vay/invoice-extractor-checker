@@ -37,7 +37,11 @@
         "check": {
           "description": "Checker to check if totals match.",
           "$ref": "#/definitions/check"
-        }
+        },
+        "plugin": {
+          "description": "Name of the plugin that needs to be loaded and called for customizations.",
+          "type": "string"
+        }        
      },
       "required": [
         "name",
@@ -60,7 +64,10 @@
             "right",
             "second-right",
             "bottom",
-            "regex"            
+            "regex",            
+            "regex-right",
+            "regex-second-right",
+            "regex-bottom"
           ]
         },        
         "identifier": {
@@ -134,6 +141,10 @@
             "right",
             "center"            
           ]
+        },
+        "can_extend_text_to_neighbour": {
+          "description": "Can the text extend till the next column so that it needs a split?",
+          "type": "boolean"
         }
       },
       "required": [

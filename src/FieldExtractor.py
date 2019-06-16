@@ -9,13 +9,14 @@ __version__     = "0.0.1"
 import json
 
 from Logger import Logger
+import collections
 from ObjectLayoutAlgorithms import ObjectLayoutAlgorithms
 
 def extract_fields(template_file_name):
 
     logger = Logger.getLogger()
     objectlayoutalgo_instance = ObjectLayoutAlgorithms.getInstance()
-    dict_of_field_values = {}
+    dict_of_field_values = collections.OrderedDict()
 
     with open(template_file_name, "r") as read_file:
         json_template = json.load(read_file)            
@@ -41,7 +42,7 @@ def extract_fields(template_file_name):
             else:
                 list_keyword_locations = []
                 list_regex_values = []
-                if field['location'] == 'regex':
+                if field['location'] == 'regex' or field['location'].startswith('regex'):
                     list_keyword_locations, list_regex_values = objectlayoutalgo_instance.search_regex(field['identifier'])    
                 else:
                     list_keyword_locations = objectlayoutalgo_instance.search_keyword(field['identifier'])
@@ -52,11 +53,11 @@ def extract_fields(template_file_name):
                         keyword_location = list_keyword_locations[counter]
                         ordinal = field.get('ordinal')
                         if ordinal == None or int(ordinal) == (counter+1):
-                            if field['location'] == 'bottom':
+                            if field['location'] == 'bottom' or field['location'] == 'regex-bottom':
                                 text = objectlayoutalgo_instance.get_text_at_bottom(keyword_location)
-                            elif field['location'] == 'right':
+                            elif field['location'] == 'right' or field['location'] == 'regex-right':
                                 text = objectlayoutalgo_instance.get_text_to_right(1, keyword_location)
-                            elif field['location'] == 'second-right':
+                            elif field['location'] == 'second-right' or field['location'] == 'regex-second-right':
                                 text = objectlayoutalgo_instance.get_text_to_right(2, keyword_location)
                             if text != None and len(text) > 0:
                                 dict_of_field_values[field['name']] = text

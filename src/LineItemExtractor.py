@@ -100,7 +100,11 @@ def determine_table_lineitems(json_template):
         column_name = column["name"]
         alignment = column["alignment"]
         row_start = column["row_start"]
-        list_of_column_information.append(ColumnInformation(column_name, alignment, row_start))
+        can_extend_text_to_neighbour = False
+        if column.get("can_extend_text_to_neighbour") != None:
+            can_extend_text_to_neighbour = column["can_extend_text_to_neighbour"] 
+
+        list_of_column_information.append(ColumnInformation(column_name, alignment, row_start, can_extend_text_to_neighbour))
     has_vertical_lines = json_template["table_lineitems"]["vertical_lines"]
     has_horizontal_lines = json_template["table_lineitems"]["horizontal_lines"]
 

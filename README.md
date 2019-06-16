@@ -1,13 +1,13 @@
 Solution to extract fields and line items from native PDF invoices
 ===========================================================
 
-This project is based on invoice2data wherein it extracts data based on regular expressions. However, observation is that quite some invoices cannot be extracted using a regular expression approach. Field values are placed at locations like to the right, bottom of a field so on. Line items are also placed in tables. This solution tries to use other techniques along with regular expressions.
+This project is based on invoice2data which extracts data from invoice pdf files using user written regular expressions. It is observed that quite some invoices cannot be extracted just using the regular expression approach since pdf text is organized not as lines of text rather as boxes with co-ordinates. Field values are placed at locations like to the right, bottom of a field so on. Line items can also placed in tables. This solution tries to use other techniques along with regular expressions to solve the problem.
 
-A python based application to extract
-1. Field values (Based on regex, right, bottom ...)
-2. Table based line item extraction (regex, vertical or horizontal table lines ...)
-3. Check if the extracted line item Total values matches the Sum Total.
+The solution is written in python and provides the following capabilities
 
+ *  Extract Field values (Based on regex or location based - right, bottom ...) 
+ *  Table based line item extraction (regex, vertical or horizontal table lines ...) 
+ *  Check if the extracted line item Total values matches the Sum Total. 
 
 Installation
 ============
@@ -19,11 +19,14 @@ Installation
 Templates
 =========
 
-Templates which are in json format, tell the solution how to pick field values (regex, top, bottom of field name) and how line items
-are present in the invoice (W/O Horizontal Vertical Lines, Line item columns)
+Templates which are in json format are used to tell the application how to pick field values (regex, top, bottom of field name) and also how line items are present in the invoice (With or Without Horizontal Vertical Lines, Line item columns…).
 
 Look at the data folder which contains jpg images of a few invoices (original native pdfs). Corresponding templates can be found at the template folder.
 Reading the jpg and its corresponding template json side-by-side would help easily understand the template contents.
+
+Detailed Documentation
+======================
+Refer doc/invoice-extractor-checker.pdf for detailed documentation.
 
 
 Running the application
@@ -37,7 +40,7 @@ python Main.py --dump dump.txt --template ../template/ --file "../data/Amazon-St
 
 
 Future work
-=======================
+===========
 1. Simple User Interface to edit template files.
 2. Docker image.
 3. Multi page/Multi header occurrences/Multi header pdfs.

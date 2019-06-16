@@ -11,8 +11,9 @@ import re
 
 from Logger import Logger
 from ConfigManager import ConfigManager
+from PluginManager import PluginManager
 
-def check_total(template_file_name, dict_of_field_values, dict_of_line_items):
+def check_total(plugin_manager, template_file_name, dict_of_field_values, dict_of_line_items):
 
     logger = Logger.getLogger()
     logger.debug(' ==> check_total(%s,%d,%d)', template_file_name, len(dict_of_field_values), len(dict_of_line_items) )
@@ -36,6 +37,11 @@ def check_total(template_file_name, dict_of_field_values, dict_of_line_items):
         try:
             # Get the field value, if regex extract the numeric value else take value as is.
             field_value = dict_of_field_values.get(field_name)
+            if field_value is None:
+                match_status = { "status" : False, "description" : "Field value cannot be empty"}
+                check_status["match_status"] = match_status
+                logger.debug('check_total(%s) ==>', str(match_status))
+                return check_status
             if field_regex_pattern is not None:
                 regex_search = re.search(field_regex_pattern, field_value) 
                 if regex_search is not None:
@@ -46,6 +52,8 @@ def check_total(template_file_name, dict_of_field_values, dict_of_line_items):
                     check_status["match_status"] = match_status
                     logger.debug('check_total(%s) ==>', str(match_status))
                     return check_status
+            elif plugin_manager is not None:
+                float_field_value = float(plugin_manager.get("check", "field", field_value))
             else:
                 float_field_value = float(field_value.replace(',', ''))
 
@@ -64,6 +72,8 @@ def check_total(template_file_name, dict_of_field_values, dict_of_line_items):
                             check_status["match_status"] = match_status
                             logger.debug('check_total(%s) ==>', str(match_status))
                             return check_status
+                    elif plugin_manager is not None:
+                        float_lineitem_value = float(plugin_manager.get("check", "lineitem", str(lineitem_value)))
                     else:
                         float_lineitem_value = float(lineitem_value.replace(',', ''))  
                                          
