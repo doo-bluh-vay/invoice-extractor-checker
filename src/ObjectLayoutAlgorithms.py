@@ -3,8 +3,8 @@
 """ObjectLayoutAlgorithms.py: pdf parsed object access related functionality."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 import re
 import logging
@@ -13,7 +13,6 @@ from Logger import Logger
 from ObjectLayoutContainer import ObjectLayoutContainer
 from copy import deepcopy
 from sortedcontainers import SortedDict, SortedList
-from sets import Set
 import collections
 
 from ConfigManager import ConfigManager
@@ -68,7 +67,7 @@ class ObjectLayoutAlgorithms:
       for rows_of_y0_textboxes in container_instance.pagewise_rows_of_y0_textboxes:
          for key_y0 in list(reversed(rows_of_y0_textboxes)):
                textboxes_at_y1 = rows_of_y0_textboxes[key_y0]
-               temp_set_keywords = Set([]) 
+               temp_set_keywords = set() 
                for key_x1 in list(textboxes_at_y1):
                   text_to_compare = textboxes_at_y1[key_x1].text
                   for keyword in set_keywords:
@@ -297,12 +296,12 @@ class ObjectLayoutAlgorithms:
             logger = Logger.getLogger()
             if logger.isEnabledFor(logging.DEBUG):
                logger.debug('OVERLAP INDEX:  ' + str(max_overlap_index))
-               logger.debug('OVERLAP TEXT :  ' + list_of_possible_textboxes[max_overlap_index].text.encode('utf-8'))
+               logger.debug('OVERLAP TEXT :  ' + list_of_possible_textboxes[max_overlap_index].text)
                logger.debug('OVERLAP VALUE :  ' + str(list_overlap[max_overlap_index]))
                logger.debug('OVERLAP CLOSENESS :  ' + str(list_closeness[max_overlap_index]))
 
                logger.debug('CLOSENESS INDEX:  ' + str(min_closeness_index))
-               logger.debug('CLOSENESS TEXT :  ' + list_of_possible_textboxes[min_closeness_index].text.encode('utf-8'))
+               logger.debug('CLOSENESS TEXT :  ' + list_of_possible_textboxes[min_closeness_index].text)
                logger.debug('CLOSENESS VALUE :  ' + str(list_closeness[min_closeness_index]))
                logger.debug('CLOSENESS OVERLAP VALUE :  ' + str(list_overlap[min_closeness_index]))   
 
@@ -310,10 +309,10 @@ class ObjectLayoutAlgorithms:
                logger.debug("CLOSENESS RATIO " + str(closeness_ratio))
 
             if overlap_ratio < closeness_ratio:
-               logger.debug("PICKED OVERLAP " + list_of_possible_textboxes[max_overlap_index].text.encode('utf-8') )
+               logger.debug("PICKED OVERLAP " + list_of_possible_textboxes[max_overlap_index].text )
                return list_of_possible_textboxes[max_overlap_index].text                  
             else:
-               logger.debug("OVERLAP CLOSENESS " + list_of_possible_textboxes[min_closeness_index].text.encode('utf-8'))
+               logger.debug("OVERLAP CLOSENESS " + list_of_possible_textboxes[min_closeness_index].text)
                return list_of_possible_textboxes[min_closeness_index].text                  
 
    def _copy_textbox (self, list_of_possible_textboxes, textbox):
@@ -568,9 +567,9 @@ class ObjectLayoutAlgorithms:
 
                   column_name_to_add = ""
                   text_to_add_to_column = ""
-                  logger.debug('NEAREST ' + textbox_at_y1_x1.text.encode('utf-8') + ' x0=' + str(nearest_x0) + ' x1=' + str(nearest_x1))
+                  logger.debug('NEAREST ' + textbox_at_y1_x1.text + ' x0=' + str(nearest_x0) + ' x1=' + str(nearest_x1))
                   if nearest_x0 != -1 and nearest_x1 != -1 :
-                     for column_name, textbox in dict_column_text_widths.items():
+                     for column_name, textbox in list(dict_column_text_widths.items()):
                         if textbox.x0 >= nearest_x0 and textbox.x1 <= nearest_x1:
                            column_name_to_add = column_name
                            text_to_add_to_column = textbox_at_y1_x1.text
@@ -629,7 +628,7 @@ class ObjectLayoutAlgorithms:
                            next_column_textbox = dict_column_text_widths[next_column.name]
                            if column.alignment == next_column.alignment:
                               if next_column_textbox.x0 > textbox_at_y1_x1.x0 and next_column_textbox.x1 <= textbox_at_y1_x1.x1:
-                                 logger.info("Text |" +textbox_at_y1_x1.text.encode('utf-8') + "| extends to column " + next_column.name)
+                                 logger.info("Text |" +textbox_at_y1_x1.text + "| extends to column " + next_column.name)
                                  if column.alignment == "center":
                                     text_to_process = textbox_at_y1_x1.text
                                     mid_point = column_textbox.x1 + (next_column_textbox.x0 - column_textbox.x1)/2
@@ -685,18 +684,18 @@ class ObjectLayoutAlgorithms:
                   if first_column.alignment == 'left':
                      column_textbox = dict_column_text_widths[first_column.name]
                      if (textbox_at_y1_x1.x0 < column_textbox.x0 and textbox_at_y1_x1.x1 < column_textbox.x0):
-                        logger.info("Ignoring |" +textbox_at_y1_x1.text.encode('utf-8') + "| since its doesn't belong to a line item")
+                        logger.info("Ignoring |" +textbox_at_y1_x1.text + "| since its doesn't belong to a line item")
                         ignore_textbox = True
 
                   if ignore_textbox == False:
-                     logger.warn("WARNING! Trying to fit since could not find column for text |" + textbox_at_y1_x1.text.encode('utf-8') + "|")                     
+                     logger.warn("WARNING! Trying to fit since could not find column for text |" + textbox_at_y1_x1.text + "|")                     
                      counter = 0
                      while counter < len(list_of_column_information):
                         column = list_of_column_information[counter]
                         column_textbox = dict_column_text_widths[column.name]
                         if (textbox_at_y1_x1.x0 >= column_textbox.x0 and textbox_at_y1_x1.x0 <= column_textbox.x1) or \
                            (textbox_at_y1_x1.x0 <= column_textbox.x0):
-                           logger.debug("Found column |" + column.name + "| for text |" + textbox_at_y1_x1.text.encode('utf-8') + "|")
+                           logger.debug("Found column |" + column.name + "| for text |" + textbox_at_y1_x1.text + "|")
                            text = one_row_of_line_item.get(column.name)
                            if text == None:
                               text = textbox_at_y1_x1.text

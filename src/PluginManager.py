@@ -3,8 +3,8 @@
 """PluginManager.py: Configuration file manager."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 from Logger import Logger
 from pluginbase import PluginBase
@@ -41,7 +41,6 @@ class PluginManager:
 
    def load_plugin(self, plugin_name):
       try:
-         print plugin_name
          if self.__plugin_source is not None:
             self.__loaded_plugin = self.__plugin_source.load_plugin(plugin_name)
       except Exception as e:

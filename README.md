@@ -12,9 +12,9 @@ The solution is written in python and provides the following capabilities
 Installation
 ============
 
-- Requires python 2.7
+- Requires python 3
 - pip/conda install the following libraries
-	json, re, deepcopy, configparser, logging, pdfminer, argparse, sortedcontainers, sets
+	json, re, deepcopy, configparser, logging, pdfminer, argparse, sortedcontainers, sets, pluginbase
 
 Templates
 =========

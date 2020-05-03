@@ -3,8 +3,8 @@
 """Main.py: Program entry point main function."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 from Logger import Logger
 from Orchestrator import Orchestrator

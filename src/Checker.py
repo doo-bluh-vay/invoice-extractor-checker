@@ -3,8 +3,8 @@
 """Checker.py: Check if a field with TOTAL value matches the sum of all the Line item TOTAL values."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 import json
 import re

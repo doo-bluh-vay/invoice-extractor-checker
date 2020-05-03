@@ -3,8 +3,8 @@
 """LineItemExtractor.py: Line Item Extraction related functionality."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 import json
 
@@ -50,7 +50,7 @@ def determine_table_lineitem_header_location(template):
         objectlayoutalgo_instance = ObjectLayoutAlgorithms.getInstance()
         lineitems_start_page_location, lineitems_start_location, dict_column_text_widths = objectlayoutalgo_instance.get_table_lineitem_header_location(list_lineitem_columns)     
 
-        for header_name, textbox_details in dict_column_text_widths.items():
+        for header_name, textbox_details in list(dict_column_text_widths.items()):
             logger.debug("TABLE LINEITEM COLUMN |" + header_name.replace("\n","\\n") + "| (x0={0:7.2f},".format(textbox_details.x0) + "x1={0:7.2f})".format(textbox_details.x1) + 
             " (y0={0:7.2f},".format(textbox_details.y0) + "y1={0:7.2f})".format(textbox_details.y1))
 

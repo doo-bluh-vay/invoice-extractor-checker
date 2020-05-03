@@ -3,14 +3,13 @@
 """ObjectLayoutContainer.py: pdf parsing, object building, storage related functionality."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 import errno
-from sets import Set
 
 from Logger import Logger
 from copy import deepcopy
@@ -328,7 +327,7 @@ class ObjectLayoutContainer:
                textboxes_at_y0 = rows_of_y0_textboxes[key_y0]
                for key_x0 in list(textboxes_at_y0):
                      textbox_at_y0_x0 = textboxes_at_y0[key_x0]
-                     row_text = row_text + " (" + "{0:7.2f}".format(textbox_at_y0_x0.x0) + ",<" + textbox_at_y0_x0.text.encode('utf-8') + ">," + \
+                     row_text = row_text + " (" + "{0:7.2f}".format(textbox_at_y0_x0.x0) + ",<" + textbox_at_y0_x0.text + ">," + \
                         "{0:7.2f}".format(textbox_at_y0_x0.x1) + ")"
                logger.debug(row_text)
             logger.debug('====== y1 TextBoxes ======')
@@ -338,7 +337,7 @@ class ObjectLayoutContainer:
                textboxes_at_y1 = rows_of_y1_textboxes[key_y1]
                for key_x1 in list(textboxes_at_y1):
                      textbox_at_y1_x1 = textboxes_at_y1[key_x1]
-                     row_text = row_text + " (" + "{0:7.2f}".format(textbox_at_y1_x1.x0) + ",<" + textbox_at_y1_x1.text.encode('utf-8') + ">," + \
+                     row_text = row_text + " (" + "{0:7.2f}".format(textbox_at_y1_x1.x0) + ",<" + textbox_at_y1_x1.text + ">," + \
                         "{0:7.2f}".format(textbox_at_y1_x1.x1) + ")"
                logger.debug(row_text)            
             logger.debug('====== Horizontal Lines ======')
@@ -386,7 +385,7 @@ class ObjectLayoutContainer:
                      for key_x0 in list(textboxes_at_y0):
                         textbox_at_y0_x0 = textboxes_at_y0[key_x0]
                         write_file.write("     " + "(x0={0:7.2f},".format(textbox_at_y0_x0.x0) + "x1={0:7.2f})".format(textbox_at_y0_x0.x1) \
-                           + " |" + textbox_at_y0_x0.text.encode('utf-8') + "|\n")
+                           + " |" + textbox_at_y0_x0.text + "|\n")
 
                   page_counter = page_counter + 1
                

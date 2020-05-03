@@ -3,8 +3,8 @@
 """Orchestrator.py: Extraction related orchestrating."""
 
 __author__      = "Balaji Sundaresan"
-__copyright__   = "Copyright 2019, mAnava"
-__version__     = "0.0.1"
+__copyright__   = "Copyright 2019-20, mAnava"
+__version__     = "0.0.2"
 
 from ObjectLayoutContainer import ObjectLayoutContainer
 import FieldExtractor
@@ -79,7 +79,7 @@ class Orchestrator:
          returned_extraced_value = self._invoke_post_processor(plugin_manager, extracted_data)
 
          with io.open(output_file_with_path, 'w', encoding='utf-8') as f:
-               f.write(unicode(json.dumps(returned_extraced_value, ensure_ascii=False, indent = 4)))
+               f.write(str(json.dumps(returned_extraced_value, ensure_ascii=False, indent = 4)))
 
    def _get_plugin_name(self, template_file_name):
 
@@ -91,7 +91,7 @@ class Orchestrator:
    def _transform_field_values(self, plugin_manager, dict_of_field_values):
 
       if plugin_manager is not None and len(dict_of_field_values) > 0 :
-         for key, value in dict_of_field_values.items():
+         for key, value in list(dict_of_field_values.items()):
             returned_value = plugin_manager.get("field", key, value)
             dict_of_field_values[key] = returned_value
 
@@ -100,7 +100,7 @@ class Orchestrator:
       if plugin_manager is not None and len(dict_of_line_items) > 0 :
          index = 0
          for line_item in dict_of_line_items:
-            for key, value in line_item.items():
+            for key, value in list(line_item.items()):
                returned_value = plugin_manager.get_line_item(index, key, value)
                line_item[key] = returned_value
             index += 1
